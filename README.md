@@ -16,16 +16,17 @@ Features:
                     Secure option to change the PIN.
   Simple Interface:
                     Command-line-based user interface (CLI) for a smooth interaction.
+                    
 Technologies Used:
-
         Java (Core)
         OOP Concepts (Encapsulation, Inheritance, Polymorphism)
         File handling for account data storage
+        
 How to Run:
-
     Clone the repository.
     Compile the Java files using javac.
     Run the main class ATM.java using java ATM.
+    
     
 Future Enhancements:
   
