@@ -1,85 +1,106 @@
 import java.util.*;
 
-public class MiniATM{
+public class MiniATM {
 
     public static void main(String[] args) {
-        // System.out.println(args);
         int pin = 1234;
-        float Balance = 10000;
+        float balance = 10000;
         float deposit = 0;
         float withdraw = 0;
 
-        String Name;
-
+        String name;
         Scanner scn = new Scanner(System.in);
 
-        System.out.print("Enter your pin");
-
+        System.out.print("Enter your pin: ");
         int password = scn.nextInt();
-       // System.err.println(password);
-       int attempt =0;
-       {
-        if(password == pin)
-        {
-            System.out.println("Enter your name");
-            Name =scn.next();
-            System.out.println("Wellcome"+Name);
+        int attempt = 0;
+        
+        // PIN validation with maximum attempts
+        while (password != pin && attempt < 3) {
+            attempt++;
+            if (attempt < 3) {
+                System.err.println("Invalid pin. Try again.");
+                System.out.print("Enter your pin: ");
+                password = scn.nextInt();
+            } else {
+                System.err.println("Too many incorrect attempts. Exiting.");
+                scn.close();
+                return;
+            }
+        }
 
-            while(true)
-            {
+        // After valid pin
+        if (password == pin) {
+            System.out.println("Enter your name: ");
+            name = scn.next();
+            System.out.println("Welcome, " + name);
+
+            // Main ATM menu
+            while (true) {
+                System.out.println("\nATM Menu:");
                 System.out.println("Press 1 to check Balance");
                 System.out.println("Press 2 to deposit");
                 System.out.println("Press 3 to withdraw");
-                System.out.println("Press 4 to Recepit");
-                System.out.println("press 5 to exit");
-
-                int opt=scn.nextInt();
-                switch (opt)
-                {
-                    case 1:
-                        System.out.println("Your current balance is"+Balance );
-                        break;
-                    case 2:
-                        System.out.println("How much Amount you going to ADD");
-                        deposit =scn.nextInt();
-                        System.out.println("Transaction Successful");
-                        Balance=deposit+Balance;
-                        break;
-                    case 3:
-                        System.out.println("How much Amount you going to withdraw");
-                        withdraw = scn.nextInt();
-                        if(withdraw >= Balance)
-                        {
-                            System.out.println("Insufficent Balance");
-                            System.out.println("Try less-than your Balance");
-                        }
-                        else
-                        {
-                            System.out.print("Withdraw Succesfull");
-                            Balance = Balance - withdraw;
-                        }
-                        break;
-                    case 4:
-                            System.out.println("Wellcome to ATM");
-                            System.out.println("Balance"+Balance);
-                            System.out.print("deposit amount"+deposit);
-                            System.out.println("withdraw amount"+withdraw);
-                            System.out.print("Thanks for comming");
-                            break;
-                    case 5:
-                            System.out.println("press 5 to exit");
-                            break;
-
-
+                System.out.println("Press 4 to view Receipt");
+                System.out.println("Press 5 to exit");
+                System.out.print("Enter your choice: ");
+                
+                int opt;
+                try {
+                    opt = scn.nextInt();
+                } catch (InputMismatchException e) {
+                    System.err.println("Invalid input. Please enter a number between 1 and 5.");
+                    scn.next();  // Clear invalid input
+                    continue;
                 }
 
+                switch (opt) {
+                    case 1:
+                        System.out.println("Your current balance is: " + balance);
+                        break;
+
+                    case 2:
+                        System.out.print("Enter deposit amount: ");
+                        deposit = scn.nextFloat();
+                        if (deposit < 0) {
+                            System.err.println("Deposit amount cannot be negative.");
+                        } else {
+                            balance += deposit;
+                            System.out.println("Transaction Successful. Deposited: " + deposit);
+                        }
+                        break;
+
+                    case 3:
+                        System.out.print("Enter withdrawal amount: ");
+                        withdraw = scn.nextFloat();
+                        if (withdraw < 0) {
+                            System.err.println("Withdrawal amount cannot be negative.");
+                        } else if (withdraw > balance) {
+                            System.err.println("Insufficient balance. Try a lesser amount.");
+                        } else {
+                            balance -= withdraw;
+                            System.out.println("Withdrawal Successful. Amount withdrawn: " + withdraw);
+                        }
+                        break;
+
+                    case 4:
+                        System.out.println("------ ATM Receipt ------");
+                        System.out.println("Name: " + name);
+                        System.out.println("Balance: " + balance);
+                        System.out.println("Deposit amount this session: " + deposit);
+                        System.out.println("Withdrawal amount this session: " + withdraw);
+                        System.out.println("Thank you for using our ATM.");
+                        break;
+
+                    case 5:
+                        System.out.println("Exiting... Thank you for using our ATM.");
+                        scn.close();
+                        return; // Exit the program
+
+                    default:
+                        System.err.println("Invalid option. Please select between 1 and 5.");
+                }
             }
         }
-        else
-        {
-            System.err.println("Invalid pin");
-        }
-    }
-
     }
 }
